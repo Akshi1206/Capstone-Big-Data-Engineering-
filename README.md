@@ -25,7 +25,7 @@ The entire data is contained in the /csv folder which contains a total of 5 file
 5. dept_manager.csv -> indicates which employee manages which department.
 6. dept_emp.csv -> indicates wich department each employee belongs to.
 
-**Tech Stack: **
+**Tech Stack:**
 - MySQL 
 - Linux Commands
 - Sqoop
