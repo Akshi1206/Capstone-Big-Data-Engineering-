@@ -1,0 +1,43 @@
+Used https://www.quickdatabasediagrams.com/ for creation ER-Diagram 
+
+
+
+titles 
+-
+title_id PK VARCHAR(10) 
+title VARCHAR(30)   
+
+employees
+-
+emp_no PK INTEGER 
+emp_title_id VARCHAR(10) FK >- titles.title_id
+birth_date DATE 
+first_name VARCHAR(20
+sex VARCHAR(10)
+hire_date DATE
+no_of_projects INTEGER
+last_performance_rating VARCHAR(20) 
+left_status INT
+last_date DATE
+
+
+salaries 
+-
+emp_no INTEGER FK >- employees.emp_no
+salary INTEGER
+
+departments
+-
+dept_no PK VARCHAR(10) 
+dept_name VARCHAR(30)
+
+
+dept_manager
+-
+dept_no VARCHAR(10) FK >- departments.dept_no
+emp_no INTEGER FK >- employees.emp_no
+
+dept_emp 
+-
+emp_no INTEGER FK >- employees.emp_no
+dept_no VARCHAR(10) FK >- departments.dept_no
