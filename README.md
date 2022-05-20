@@ -64,7 +64,9 @@ Run the command to copy the schema file to hdfs: hdfs dfs -put Employees_dataset
 
 Run the following command to create hive table: hive -f Hive_table_create.hql
 
-Run the following command to run the analysis on the tables we have created in hive and the save the query in output_hive_tables.txt: hive -f Hive_table_create.hql > EDA-Impala.txt
+Run the following command to run the analysis on the tables we have created in hive and the save the query in Hive_table_create.hql: hive -f Hive_table_create.hql 
+
+Open Impala and run EDA-Impala.txt file for EDA using Hive Tables
 
 Open the  Capstone_EDA.ipynb file for running all the Spark SQL EDA 
 and Open Open the  ML_Pipeline.ipynb file for running all the ML commands
