@@ -1,0 +1,128 @@
+Impala EDA 
+
+
+--1. A list showing employee number, last name, first name, sex, and salary for each employee
+
+select t1.emp_no , t1.last_name,t1.first_name ,t1.sex ,
+ t2.salary from employees t1 left join salaries t2 on t1.emp_no = t2.emp_no limit 5;
+ 
+--2. A list showing first name, last name, and hire date for employees who were hired in 1986.
+
+select first_name,last_name,hire_date from employees where  substr(hire_date,6,10) = '1986'
+
+--3. A list showing the manager of each department with the following information: department number, department name,
+--the manager's employee number, last name, first name.
+
+select t1.dept_no,t2.emp_no,t3.last_name,t3.first_name from departments t1 inner join dept_manager t2 
+on t1.dept_no = t2.dept_no
+ inner join employees t3 on t2.emp_no = t3.emp_no ;
+
+--4. A list showing the department of each employee with the following information: employee number, last name, first
+--name, and department name.
+
+ select t2.emp_no, t3.last_name,t3.first_name,t1.dept_name from departments t1 inner join dept_emp t2 on t1.dept_no = t2.dept_no
+ inner join employees t3 on t2.emp_no = t3.emp_no ;
+ 
+--5. A list showing first name, last name, and sex for employees whose first name is "Hercules" and last names begin with "B.“
+
+ select first_name,last_name ,sex from employees where first_name = 'Hercules' and last_name like('B%');
+ 
+
+--6. A list showing all employees in the Sales department, including their employee number, last name, first name, and
+--department name.
+
+ select t1.emp_no,t1.last_name,t1.first_name,t3.dept_name from employees t1  join dept_emp t2 on t1.emp_no = t2.emp_no 
+ join departments t3 on t2.dept_no = t3.dept_no  where t3.dept_name = '"Sales"'
+
+--7. A list showing all employees in the Sales and Development departments, including their employee number, last name,
+--first name, and department name
+
+
+select t1.emp_no,t1.last_name,t1.first_name,t3.dept_name from employees t1  join dept_emp t2 on t1.emp_no = t2.emp_no 
+join departments t3 on t2.dept_no = t3.dept_no  where t3.dept_name IN('"Sales"','"Development"')
+
+--8. A list showing the frequency count of employee last names, in descending order. ( i.e., how many employees share each
+--last name
+select last_name , count(emp_no) from employees   group by last_name
+
+
+--9. Histogram to show the salary distribution among the employees
+
+select t1.Salary_bins , count(t1.emp_no) from (select 
+case 
+when s.salary <= 40000    then 'Less than 40k '
+when s.salary > 40000 and s.salary < 50000   then '40-50k'
+when s.salary > 50000 and s.salary < 60000 then '50 -60k' 
+when s.salary > 60000 and s.salary < 70000 then '60 -70k'
+when s.salary > 70000 and s.salary < 80000 then '70 -80k'
+when s.salary > 80000 and s.salary < 90000 then '80 -90k'
+when s.salary > 90000 and s.salary < 100000 then '90 -100k'
+when s.salary > 100000 then '10k+'
+end as Salary_bins, e.emp_no
+from employees e
+inner join salaries s on e.emp_no = s.emp_no ) t1
+group by t1.Salary_bins;
+
+
+--10. Bar graph to show the Average salary per title (designation)
+
+select t.title, avg(s.salary) from employees e
+inner join titles t on e.emp_title_id = t.title_id 
+inner join salaries s on e.emp_no = s.emp_no
+group by t.title
+
+
+--11. Calculate employee tenure & show the tenure distribution among the employees
+
+create view tenure as 
+select *, cast(substr(last_date, -4,4) as int) last_year , cast(substr(hire_date, -4,4) as int) hire_year from employees;
+
+
+SELECT COUNT(emp_no), CASE WHEN left_year IS NULL THEN (2013-hire_year)
+        ELSE (left_year - hire_year)
+        END AS tenure
+FROM employees_tenure
+GROUP BY CASE    
+        WHEN left_year IS NULL THEN (2013-hire_year)
+        ELSE (left_year - hire_year)
+        END;
+        
+-- 12. Count of employee gender distribution.
+  SELECT sex , COUNT(emp_no) FROM employees
+  GROUP BY sex;
+  
+-- 13. Count of employees basewd on rating.
+SELECT Last_performance_rating , COUNT(emp_no) FROM employees
+  GROIP BY last_performance_rating
+  
+  
+-- 14. which department required maximun empoyment performance improvement.
+
+ select t3.dept_name , count(t1.emp_no) from employees t1 left join dept_emp t2 on t1.emp_no= t2.emp_no 
+ left join departments t3 on t2.dept_no = t3.dept_no  
+ where t1.last_performance_rating = 'PIP' group by t3.dept_name order by count(t1.emp_no) desc
+  
+  
+-- 15. count of employees according to desingnation. 
+ SELECT T.title,COUNT(EMP.emp_no)  FROM titles T
+ INNER JOIN employees EMP
+    ON T.title_id = EMP.emp_title_id
+GROUP BY(T.title);
+
+--  16. department wise performance 
+  select t3.dept_name ,t1.last_performance_rating, count(emp_no) from employees t1 left join dept_emp t2 on t1.emp_no= t2.emp_no
+  left join departments t3 on t2.dept_no = t3.dept_no
+  group by t3.dept_name,t1.last_performance_rating
+  order by count(emp_no) desc;
+  
+  
+--17. most paid employees.
+ 
+select t1.first_name,t1.last_name,sum(t2.salary) from employees t1 left join salaries t2 on
+t1.emp_no = t2.emp_no
+group by t1.first_name,t1.last_name
+order by sum(t2.salary) desc
+
+
+        
+ 
