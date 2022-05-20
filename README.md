@@ -41,9 +41,9 @@ The entire data is contained in the /csv folder which contains a total of 5 file
 
 **Run the following Commands in the given order**
 
-Login to mysql mysql -u anabig114248 -pBigdata123
+Login to mysql 
 
-show databases; use anabig114248;
+show databases; 
 
 Create tables for employee data using codes 
 a. upload csv to ftp (https://npbdh.cloudloka.com/ftp)
