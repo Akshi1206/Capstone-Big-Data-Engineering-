@@ -35,3 +35,37 @@ The entire data is contained in the /csv folder which contains a total of 5 file
 - SparkSQL 
 - SparkML 
 
+
+
+ 
+
+**Run the following Commands in the given order**
+
+Login to mysql mysql -u anabig114248 -pBigdata123
+
+show databases; use anabig114248;
+
+Create tables for employee data using codes 
+a. upload csv to ftp (https://npbdh.cloudloka.com/ftp)
+b. run the below command to create tables and lead data into them under: source My_sql_table_create.txt
+
+exit from mysql by using below given command: quit
+
+create a directory in hdfs and a directory in local to store the dataset as well as tables schema which will be import from mysql by using below commands: creating directory in hdfs. hdfs dfs -mkdir Employees_dataset creating directory in local mkdir Employees_dataset_schema
+
+
+change the directory to Employees_dataset  we have created: cd Employees_dataset_schema
+
+Run the following command: sh Sqoop.sh
+
+cd the directory back to local: cd ..
+
+Run the command to copy the schema file to hdfs: hdfs dfs -put Employees_dataset
+
+Run the following command to create hive table: hive -f Hive_table_create.hql
+
+Run the following command to run the analysis on the tables we have created in hive and the save the query in output_hive_tables.txt: hive -f Hive_table_create.hql > EDA-Impala.txt
+
+Open the  Capstone_EDA.ipynb file for running all the Spark SQL EDA 
+and Open Open the  ML_Pipeline.ipynb file for running all the ML commands
+
